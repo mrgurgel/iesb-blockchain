@@ -3,7 +3,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const app = express();
 
-const products = require("./apis/products/lyrics.js");
+const lyrics = require("./apis/products/lyrics.js");
 const stages = require("./apis/products/stages");
 const history = require("./apis/products/history.js");
 
@@ -32,27 +32,13 @@ app.get('/', (req, res) => {
 app.use("/api/auth", authRoutes);
 
 // * Products pages * //
-app.get("/addLyrics", products.renderAddLyrics);
-app.get("/getLyrics", products.renderGetProducts);
-app.get("/editProduct", products.renderEditProduct);
+app.get("/addLyrics", lyrics.renderAddLyrics);
+app.get("/getLyrics", lyrics.renderGetLyrics);
 
-app.post("/addLyrics", products.addLyrics);
-app.post("/updateProduct", products.updateProduct);
-app.get("/listLyrics", products.getLyrics);
+app.post("/addLyrics", lyrics.addLyrics);
+app.get("/listLyrics", lyrics.getLyrics);
 
-// * Estágios * //
-app.get("/addStage", stages.renderAddStage);
-app.get("/getStages", stages.renderGetStages);
 
-app.post("/addStage", stages.addStage);
-app.get("/listStages", stages.listStages);
-
-// * History * //
-app.get("/addHistory", history.renderAddHistory);
-app.post("/addHistory", history.addHistory);
-
-app.get("/getHistory", history.getHistory);
-app.get("/listHistory", history.renderGetHistory);
 
 const PORT = process.env.PORT || 3000;
 

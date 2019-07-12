@@ -27,22 +27,13 @@ module.exports = {
             res.render('letras.html');
         }
     },
-    renderGetProducts: function(req, res) {
+    renderGetLyrics: function(req, res) {
         // verifica se usuario esta logado
         if (!req.session.username) {
             res.redirect('/api/auth');
             res.end();
         } else {
             res.render('listaletras.html');
-        }
-    },
-    renderEditProduct: function(req, res) {
-        // verifica se usuario esta logado
-        if (!req.session.username) {
-            res.redirect('/api/auth');
-            res.end();
-        } else {
-            res.render('editProduct.html');
         }
     },
     getLyrics: async function(req, res) {
@@ -110,12 +101,12 @@ module.exports = {
         }
     },
     updateProduct: async (req, res) => {
-        
+
         if (!req.session.username) {
             res.redirect('/');
             res.end();
         } else {
-        
+
             let productId = req.body.productId;
             let newDesc   = req.body.newDesc;
             let newPrice  = req.body.newPrice;
@@ -133,7 +124,7 @@ module.exports = {
                         .send({ from: userAddr, gas: 3000000 })
                         .then(receipt => {
                             console.log(receipt);
-                            return res.send({ 'error': false, 'msg': 'Produto atualizado com sucesso.'}); 
+                            return res.send({ 'error': false, 'msg': 'Produto atualizado com sucesso.'});
                         })
                         .catch((err) => {
                             console.log(err);
