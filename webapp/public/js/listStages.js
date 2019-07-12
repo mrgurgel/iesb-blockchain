@@ -9,7 +9,7 @@ function getStages() {
     $.get("/listStages", function(res) {
         
         if (!res.error) {
-            console.log("*** Views -> js -> produtos.js -> getProducts: ***", res.msg);
+            console.log("*** Views -> js -> produtos.js -> getLyrics: ***", res.msg);
 
             let stages = res.stages;
             console.table(stages);

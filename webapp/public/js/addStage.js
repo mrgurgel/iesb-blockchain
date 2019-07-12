@@ -64,7 +64,7 @@ function getProducts() {
     $.get("/listProducts", function(res) {
         
         if (!res.error) {
-            console.log("*** Views -> js -> produtos.js -> getProducts: ***", res.msg);
+            console.log("*** Views -> js -> produtos.js -> getLyrics: ***", res.msg);
 
             if (res.msg === "no products yet") {
                 return;
@@ -86,7 +86,7 @@ function getProducts() {
                 cols += `<td> ${produtos[i].preco} </td>`;
                 
                 newRow.append(cols);
-                $("#products-table").append(newRow);
+                $("#lyrics-table").append(newRow);
             }
             
         } else {

@@ -17,14 +17,14 @@ let web3 = new Web3(httpEndpoint, null, OPTIONS);
 let MyContract = new web3.eth.Contract(product_abi.abi, contractAddress);
 
 module.exports = {
-    renderAddProducts: function(req, res) {
+    renderAddLyrics: function(req, res) {
 
         // verifica se usuario esta logado
         if (!req.session.username) {
             res.redirect('/api/auth');
             res.end();
         } else {
-            res.render('produtos.html');
+            res.render('letras.html');
         }
     },
     renderGetProducts: function(req, res) {
@@ -33,7 +33,7 @@ module.exports = {
             res.redirect('/api/auth');
             res.end();
         } else {
-            res.render('listaProdutos.html');
+            res.render('listaletras.html');
         }
     },
     renderEditProduct: function(req, res) {
@@ -45,47 +45,47 @@ module.exports = {
             res.render('editProduct.html');
         }
     },
-    getProducts: async function(req, res) {
+    getLyrics: async function(req, res) {
         console.log(contractAddress)
         let userAddr = req.session.address;
-        console.log("*** Getting products ***", userAddr);
+        console.log("*** Getting lyrics from block chain ***", userAddr);
 
-        await MyContract.methods.getProducts()
+        await MyContract.methods.getLyrics()
             .call({ from: userAddr, gas: 3000000 })
-            .then(function (prod) {
+            .then(function (lyric) {
 
-                console.log("prod", prod);
-                if (prod === null) {
+                console.log("prod", lyric);
+                if (lyric === null) {
                     return res.send({ error: false, msg: "no products yet"});
                 }
 
-                let produtos = [];
-                for (i = 0; i < prod['0'].length; i++) {
-                    produtos.push({ 'id': +prod['0'][i], 'produto': prod['1'][i], 'addr': prod['2'][i], 'preco': +prod['3'][i] });
+                let letras = [];
+                for (i = 0; i < lyric['0'].length; i++) {
+                    letras.push({ 'id': +lyric['0'][i], 'letra': lyric['1'][i], 'addr': lyric['2'][i], 'autor': lyric['3'][i] });
                 }
 
-                console.log("produtos", produtos);
+                console.log("lyrics", letras);
 
-                res.send({ error: false, msg: "produtos resgatados com sucesso", produtos});
+                res.send({ error: false, msg: "letras resgatados com sucesso", letras: letras});
                 return true;
             })
             .catch(error => {
-                console.log("*** productsApi -> getProducts ***error:", error);
+                console.log("*** productsApi -> getLyrics ***error:", error);
                 res.send({ error: true, msg: error});
             })
         
     },
-    addProducts: async function(req, res) {
+    addLyrics: async function(req, res) {
 
         if (!req.session.username) {
             res.redirect('/');
             res.end();
         } else {
-            console.log("*** ProductsApi -> AddProducts ***");
+            console.log("*** LyricsAPI -> AddLyric, acionando a block chain ***");
             console.log(req.body);
 
-            let produto = req.body.produto;
-            let preco   = req.body.preco;
+            let letra = req.body.letra;
+            let autor   = req.body.autor;
             let userAddr = req.session.address;
             let pass     = req.session.password;
 
@@ -93,11 +93,11 @@ module.exports = {
                 let accountUnlocked = await web3.eth.personal.unlockAccount(userAddr, pass, null)
                 if (accountUnlocked) {
 
-                    await MyContract.methods.addProduct(produto, preco)
+                    await MyContract.methods.addLyric(letra, autor)
                         .send({ from: userAddr, gas: 3000000 })
                         .then(function(result) {
                             console.log(result);
-                            return res.send({ 'error': false, 'msg': 'Produto cadastrado com sucesso.'});  
+                            return res.send({ 'error': false, 'msg': 'Letra cadastradada com sucesso.'});
                         })
                         .catch(function(err) {
                             console.log(err);
@@ -105,7 +105,7 @@ module.exports = {
                         })
                 } 
             } catch (err) {
-                return res.send({ 'error': true, 'msg': 'Erro ao desbloquear sua conta. Por favor, tente novamente mais tarde.'});
+                return res.send({ 'error': true, 'msg': 'Erro ao adicionar letra: ' + err});
             }
         }
     },

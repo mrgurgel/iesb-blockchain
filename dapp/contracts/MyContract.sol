@@ -6,7 +6,7 @@ contract MyContract {
     // evento para notificar o cliente que a conta foi atualizada
     event userRegisted(address _addr, string newEmail);
     // evento para notificar o cliente que o produto foi registrado
-    event productRegistered(uint id);
+    event lyricRegistered(uint id);
     // evento para notificar o cliente de que a Etapa foi registrada
     event StageRegistered(uint[]);
     // evento para notificar o cliente de que um histórico foi registrado
@@ -28,10 +28,10 @@ contract MyContract {
     }
 
     // estrutura para manter dados do produto
-    struct Product {
+    struct Lyric {
         uint id;
         string desc;
-        uint price;
+        string author;
         address owner;
     }
 
@@ -43,9 +43,9 @@ contract MyContract {
         address productOwner;
     }
 
-    // mapeia um id a um produto
-    mapping (uint => Product) products;
-    uint[] public productsIds;
+    // mapeia um id a uma letra
+    mapping (uint => Lyric) lyrics;
+    uint[] public lyricsIds;
 
     // mapeia um id a uma etapa
     mapping(uint => Stage) stages;
@@ -79,64 +79,51 @@ contract MyContract {
     }
 
     // função para cadastrar um produto
-    function addProduct(string memory _desc, uint _price) public {
-        require(bytes(_desc).length >= 1, "Invalid name");
-        require(_price > 0, "Price must be higher than zero");
+    function addLyric(string memory _lyric, string memory _author) public {
+        require(bytes(_lyric).length >= 1, "Letra invalida");
+        require(bytes(_author).length >= 1, "autor invalido");
 
-        products[lastId] = Product(lastId, _desc, _price, msg.sender);
-        productsIds.push(lastId);
+        lyrics[lastId] = Lyric(lastId, _lyric, _author, msg.sender);
+        lyricsIds.push(lastId);
         lastId++;
-        emit productRegistered(lastId);
-    }
-
-    function updateProduct(uint _productId, string memory _newDesc, uint _newPrice) public {
-        require(bytes(_newDesc).length >= 1, "Invalid name");
-        require(_newPrice > 0, "New price must be higher than zero");
-
-        Product storage prod = products[_productId];
-
-        require(prod.owner == msg.sender, "Only the owner can update the product");
-        prod.desc = _newDesc;
-        prod.price = _newPrice;
-
-        emit productUpdated(_productId, "Produto atualizado com successo");
+        emit lyricRegistered(lastId);
     }
 
     // função para resgatar info de um produto
-    function productInfo(uint _id) public view
+    function lyricInfo(uint _id) public view
         returns(
             uint,
             string memory,
             address,
-            uint
+            string memory
         ) {
             require(_id <= lastId, "Product does not exist");
 
-            Product memory product = products[_id];
+            Lyric memory lyric = lyrics[_id];
 
             return (
-                product.id,
-                product.desc,
-                products[_id].owner,
-                product.price
+                lyric.id,
+                lyric.desc,
+                lyrics[_id].owner,
+                lyric.author
             );
     }
 
     // função que retorna todos os produtos de um usuário
-    function getProducts() public view returns(uint[] memory, string[] memory, address[] memory, uint[] memory) {
+    function getLyrics() public view returns(uint[] memory, string[] memory, address[] memory, string   [] memory) {
 
-        uint[] memory ids = productsIds;
+        uint[] memory ids = lyricsIds;
 
-        uint[] memory idsProducts = new uint[](ids.length);
+        uint[] memory idsLyrics = new uint[](ids.length);
         string[] memory names = new string[](ids.length);
         address[] memory owners = new address[](ids.length);
-        uint[] memory prices = new uint[](ids.length);
+        string[] memory authors = new string[](ids.length);
 
         for (uint i = 0; i < ids.length; i++) {
-            (idsProducts[i], names[i], owners[i], prices[i]) = productInfo(i);
+            (idsLyrics[i], names[i], owners[i], authors[i]) = lyricInfo(i);
         }
 
-        return (idsProducts, names, owners, prices);
+        return (idsLyrics, names, owners, authors);
     }
 
     function isProductInHistory(uint _id) public view returns (bool) {
@@ -201,7 +188,7 @@ contract MyContract {
 
         for (uint i = 0; i < ids.length; i++) {
             (prodsIds[i], stageDesc[i], dates[i], addrs[i]) = HistoryInfo(i);
-            (, productsNames[i], ,) = productInfo(prodsIds[i]);
+            (, productsNames[i], ,) = lyricInfo(prodsIds[i]);
         }
 
         return (productsNames, stageDesc, dates, addrs);

@@ -3,7 +3,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const app = express();
 
-const products = require("./apis/products/products.js");
+const products = require("./apis/products/lyrics.js");
 const stages = require("./apis/products/stages");
 const history = require("./apis/products/history.js");
 
@@ -32,13 +32,13 @@ app.get('/', (req, res) => {
 app.use("/api/auth", authRoutes);
 
 // * Products pages * //
-app.get("/addProducts", products.renderAddProducts);
-app.get("/getProducts", products.renderGetProducts);
+app.get("/addLyrics", products.renderAddLyrics);
+app.get("/getLyrics", products.renderGetProducts);
 app.get("/editProduct", products.renderEditProduct);
 
-app.post("/addProducts", products.addProducts);
+app.post("/addLyrics", products.addLyrics);
 app.post("/updateProduct", products.updateProduct);
-app.get("/listProducts", products.getProducts);
+app.get("/listLyrics", products.getLyrics);
 
 // * Estágios * //
 app.get("/addStage", stages.renderAddStage);

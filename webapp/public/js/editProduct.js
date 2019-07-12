@@ -42,7 +42,7 @@ function updateProduct(event) {
             $('#load').attr('disabled', false);
 
             alert("Seu produto foi atualizado com sucesso");
-            window.location.href = "/getProducts";
+            window.location.href = "/getLyrics";
         } else {
             alert("Erro ao atualizar produto. Por favor, tente novamente mais tarde. " + res.msg);
         }
