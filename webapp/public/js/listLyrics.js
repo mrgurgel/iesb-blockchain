@@ -27,7 +27,7 @@ function getLyrics() {
 
                 cols += `<td> ${desc} </td>`;
                 cols += `<td> ${preco} </td>`;
-                cols += `<td> ${owner} </td>`;
+                cols += `<td style="width:60px;word-wrap:break-word;"> ${owner} </td>`;
 
                 
                 newRow.append(cols);

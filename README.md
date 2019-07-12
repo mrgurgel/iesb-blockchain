@@ -1,4 +1,10 @@
-﻿### Dependências necessárias
+﻿## Cadastro de autoria de músicas em block chain
+
+Este cadastro tem o objetivo de apresentar como a block chain pode ser utilizada para garantir a autoria de trabalhos artísticos.
+
+As diretrizes para execução deste projeto seguem iguais às do projeto original (o qual este é um fork).
+
+### Dependências necessárias
 
 Os softwares necessários para rodar o app são:
 

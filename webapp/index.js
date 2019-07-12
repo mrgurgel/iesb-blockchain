@@ -4,8 +4,6 @@ const bodyParser = require('body-parser');
 const app = express();
 
 const lyrics = require("./apis/products/lyrics.js");
-const stages = require("./apis/products/stages");
-const history = require("./apis/products/history.js");
 
 // set default views folder
 app.set('views', __dirname + "/views");
